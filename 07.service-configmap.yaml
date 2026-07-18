@@ -9,6 +9,6 @@ spec:
   - name: nginx
     image: nginx
 
-  envFrom:
-  - configMapRef:
-      name: pod-config
+    envFrom:
+    - configMapRef:
+        name: demo-service
