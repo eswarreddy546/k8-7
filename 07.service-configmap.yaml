@@ -1,16 +1,14 @@
 apiVersion: v1
-kind: Service
+kind: Pod
+
 metadata:
-  name: service-demo
+  name: config-map-demo
 
 spec:
   containers:
-    - name: nginx
-      image: nginx
+  - name: nginx
+    image: nginx
 
-      ports:
-        port: 80
-    
-  envfrom:
-   - ConfigMapRef:
-      - name: demo-service
+  envFrom:
+  - configMapRef:
+      name: pod-config
