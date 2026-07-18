@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: cluster-pod
+  namespace: roboshop
+  labels:
+    project: dev-roboshop
+    env: dev
+
+spec:
+  containers:
+    - name: nginx
+      image: nginx
+      ports:
+        - containerPort: 80
