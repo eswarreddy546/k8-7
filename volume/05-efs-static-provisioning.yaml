@@ -45,3 +45,18 @@ spec:
   - name: nginx-html
     persistentVolumeClaim:
       claimName: efs-static
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx
+spec:
+  type: NodePort
+  selector:
+    purpose: efs-static
+  ports:
+    - port: 80
+      targetPort: 80
+      protocol: TCP
