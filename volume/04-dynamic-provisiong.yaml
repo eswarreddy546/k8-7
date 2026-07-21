@@ -30,7 +30,7 @@ metadata:
     purpose: ebs-dynamic
 spec:
   containers:
-  - name: nginx
+  - name: nginx-dynamic
     image: nginx
     volumeMounts:
     - name: nginx-html
