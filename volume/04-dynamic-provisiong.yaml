@@ -13,7 +13,7 @@ allowVolumeExpansion: true
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: ebs-dynamic
+  name: ebs-dynamic-r
 spec:
   accessModes:
     - ReadWriteOnce
