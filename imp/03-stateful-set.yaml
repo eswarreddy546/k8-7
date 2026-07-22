@@ -1,0 +1,88 @@
+# -----------------------------
+# StorageClass
+# -----------------------------
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: roboshop-ebs
+
+provisioner: ebs.csi.aws.com
+volumeBindingMode: WaitForFirstConsumer
+allowVolumeExpansion: true
+
+parameters:
+  type: gp3
+
+---
+# -----------------------------
+# Headless Service
+# -----------------------------
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-headless
+
+spec:
+  clusterIP: None
+
+  selector:
+    app: mysql
+
+  ports:
+    - name: mysql
+      port: 3306
+      targetPort: 3306
+
+---
+# -----------------------------
+# StatefulSet
+# -----------------------------
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mysql
+
+spec:
+  serviceName: mysql-headless
+
+  replicas: 3
+
+  selector:
+    matchLabels:
+      app: mysql
+
+  template:
+    metadata:
+      labels:
+        app: mysql
+
+    spec:
+      containers:
+        - name: mysql
+          image: mysql:8.0
+
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              value: roboshop
+
+          ports:
+            - containerPort: 3306
+              name: mysql
+
+          volumeMounts:
+            - name: mysql-storage
+              mountPath: /var/lib/mysql
+
+  volumeClaimTemplates:
+    - metadata:
+        name: mysql-storage
+
+      spec:
+        accessModes:
+          - ReadWriteOnce
+
+        storageClassName: roboshop-ebs
+
+        resources:
+          requests:
+            storage: 10Gi
