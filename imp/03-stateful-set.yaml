@@ -4,7 +4,7 @@
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
-  name: roboshop-ebs
+  name: roboshop-dev
 
 provisioner: ebs.csi.aws.com
 volumeBindingMode: WaitForFirstConsumer
@@ -81,7 +81,7 @@ spec:
         accessModes:
           - ReadWriteOnce
 
-        storageClassName: roboshop-ebs
+        storageClassName: roboshop-dev
 
         resources:
           requests:
