@@ -1,6 +1,6 @@
-# -----------------------------
+# ===========================================
 # StorageClass
-# -----------------------------
+# ===========================================
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
@@ -14,13 +14,16 @@ parameters:
   type: gp3
 
 ---
-# -----------------------------
+# ===========================================
 # Headless Service
-# -----------------------------
+# ===========================================
 apiVersion: v1
 kind: Service
 metadata:
   name: mysql-headless
+  namespace: roboshop
+  labels:
+    app: mysql
 
 spec:
   clusterIP: None
@@ -34,13 +37,14 @@ spec:
       targetPort: 3306
 
 ---
-# -----------------------------
+# ===========================================
 # StatefulSet
-# -----------------------------
+# ===========================================
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: mysql
+  namespace: roboshop
 
 spec:
   serviceName: mysql-headless
@@ -57,17 +61,28 @@ spec:
         app: mysql
 
     spec:
+      terminationGracePeriodSeconds: 30
+
       containers:
         - name: mysql
           image: mysql:8.0
+          imagePullPolicy: IfNotPresent
 
           env:
             - name: MYSQL_ROOT_PASSWORD
               value: roboshop
 
           ports:
-            - containerPort: 3306
-              name: mysql
+            - name: mysql
+              containerPort: 3306
+
+          resources:
+            requests:
+              cpu: "250m"
+              memory: "512Mi"
+            limits:
+              cpu: "500m"
+              memory: "1Gi"
 
           volumeMounts:
             - name: mysql-storage
