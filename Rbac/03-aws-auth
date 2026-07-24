@@ -9,8 +9,8 @@ data:
   mapUsers: |
     - groups:
       - roboshop-trainee
-      userarn: arn:aws:iam::526426842890:user/eswaracessec2andecspolicy
-      username: eswaracessec2andecspolicy
+      userarn: arn:aws:iam::526426842890:user/neweswarnamespace
+      username: neweswarnamespace
     
 kind: ConfigMap
 metadata:
